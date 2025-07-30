@@ -1,0 +1,94 @@
+import { cn } from "@/lib/utils";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useRef, useState } from "react";
+import { Button } from "./ui/button";
+
+const Navbar = ({ hide }: { hide: boolean }) => {
+  const { scrollYProgress, scrollY } = useScroll({
+    axis: "y",
+  });
+  const [scrolledPast, setScrolledPast] = useState(false);
+  const { data } = useSession();
+  const prevScrollY = useRef(0);
+  const [goingUp, setGoingUp] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.06 && !scrolledPast) {
+      setScrolledPast(true);
+    } else if (scrolledPast && latest < 0.06) {
+      setScrolledPast(false);
+    }
+  });
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const prev = prevScrollY.current;
+    if (!scrolledPast) return;
+    if (latest > prev) {
+      setGoingUp(true); // scrolling down → show nav
+    } else if (latest < prev) {
+      setGoingUp(false); // scrolling up → hide nav
+    }
+
+    prevScrollY.current = latest;
+  });
+
+  const icons = {
+    chrome: <img className="size-6" src={"/chrome.svg"} />,
+    edge: <img className="size-8" src={"/edge.svg"} />,
+    firefox: <img className="size-8" src={"/firefox.svg"} />,
+    safari: <img className="size-8" src={"/safari.svg"} />,
+    brave: <img className="size-8" src={"/brave.svg"} />,
+  };
+
+  return (
+    <>
+      <AnimatePresence>
+        {hide ||
+          (scrolledPast && (
+            <motion.div
+              animate={{ y: goingUp ? 0 : 80 }}
+              transition={{ duration: 0.3 }}
+              className={cn(
+                "bottom-0 fixed z-50 border-t border-neutral-300/80 bg-orange-100 text-neutral-900  backdrop-blur-md px-4 h-20  inset-x-0 right-0 left-0 shadow-xl flex items-center justify-center"
+              )}
+            >
+              <div className="flex max-w-5xl mx-auto items-center justify-between w-full">
+                {/* <div className="ml-4  text-lg font-inter font-semibold">
+                  Discover.wtf
+                </div> */}
+
+                <span className="text-lg text-orange-700 leading-tight font-medium tracking-tight font-inter">
+                  Discover the untouched corner's of the web through
+                  discover.wtf
+                </span>
+                <div className="w-fit ">
+                  <Button className="group md:max-w-xs w-full relative px-6 h-14 py-3 font-semibold text-white  border-0 rounded-full  transition-all [&_svg]:size-6 bg-orange-600 duration-300 hover:scale-105 hover:shadow-2xl">
+                    <img
+                      draggable={false}
+                      className="group-hover:opacity-100 select-none absolute opacity-0 "
+                      src="stars.gif"
+                      alt=""
+                    />
+                    <motion.div className="relative font-inter z-10 flex items-center space-x-2">
+                      {icons["chrome"]}
+                      <span className="flex items-center text-lg justify-center mr-2">
+                        Get Extension
+                      </span>
+                    </motion.div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20  to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default Navbar;
