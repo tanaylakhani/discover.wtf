@@ -43,7 +43,7 @@ const faqData: FAQItem[] = [
   },
 ];
 
-export default function Component() {
+export default function FAQs() {
   const [openIndex, setOpenIndex] = useState<number>(0);
 
   const toggleFAQ = (index: number) => {
@@ -51,7 +51,7 @@ export default function Component() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto md:mt-[100px] px-4 py-16">
+    <div className="max-w-5xl z-[2] mx-auto md:mt-[100px] px-4 py-16">
       <div className="grid grid-cols-1  gap-12 items-center">
         {/* Title Section */}
         <div className="flex items-center justify-center">

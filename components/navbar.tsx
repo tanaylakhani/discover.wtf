@@ -54,7 +54,7 @@ const Navbar = ({ hide }: { hide: boolean }) => {
               animate={{ y: goingUp ? 0 : 80 }}
               transition={{ duration: 0.3 }}
               className={cn(
-                "bottom-0 fixed z-50 border-t border-neutral-300/80 bg-orange-100 text-neutral-900  backdrop-blur-md px-4 h-20  inset-x-0 right-0 left-0 shadow-xl flex items-center justify-center"
+                "bottom-0 fixed z-50 border-t border-neutral-300/80 bg-orange-100 text-neutral-900  backdrop-blur-md px-6 py-2  inset-x-0 right-0 left-0 shadow-xl flex items-center justify-center"
               )}
             >
               <div className="flex max-w-5xl mx-auto items-center justify-between w-full">
@@ -62,12 +62,11 @@ const Navbar = ({ hide }: { hide: boolean }) => {
                   Discover.wtf
                 </div> */}
 
-                <span className="text-lg text-orange-700 leading-tight font-medium tracking-tight font-inter">
-                  Discover the untouched corner's of the web through
-                  discover.wtf
+                <span className=" text-orange-700 leading-tight font-medium tracking-tight font-inter">
+                  Start discovering software that matters.
                 </span>
                 <div className="w-fit ">
-                  <Button className="group md:max-w-xs w-full relative px-6 h-14 py-3 font-semibold text-white  border-0 rounded-full  transition-all [&_svg]:size-6 bg-orange-600 duration-300 hover:scale-105 hover:shadow-2xl">
+                  <Button className="group md:max-w-xs w-full relative px-6 h-10 py-3 font-semibold text-white  border-0 rounded-xl  transition-all [&_svg]:size-4 bg-orange-500 duration-300 hover:scale-105 hover:shadow-2xl">
                     <img
                       draggable={false}
                       className="group-hover:opacity-100 select-none absolute opacity-0 "
@@ -76,7 +75,7 @@ const Navbar = ({ hide }: { hide: boolean }) => {
                     />
                     <motion.div className="relative font-inter z-10 flex items-center space-x-2">
                       {icons["chrome"]}
-                      <span className="flex items-center text-lg justify-center mr-2">
+                      <span className="flex items-center justify-center mr-2">
                         Get Extension
                       </span>
                     </motion.div>

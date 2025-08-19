@@ -66,6 +66,13 @@ export const QUERY_USER = () => gql`
     }
   }
 `;
+export const QUERY_USER_BY_ID = () => gql`
+  query User {
+    user {
+      id
+    }
+  }
+`;
 
 export const QUERY_USER_STRING = `
 query User {

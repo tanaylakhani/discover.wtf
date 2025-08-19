@@ -511,3 +511,105 @@ export const SIMILAR_LINKS_QUERY = (
     }
   }
 `;
+
+export const MUTATION_CREATE_LINK = () => gql`
+  mutation Add_link(
+    $url: String!
+    $title: String
+    $description: String
+    $collections: [ID!]
+    $repository_ids: [ID!]
+  ) {
+    add_link(
+      input: {
+        target_url: $url
+        title: $title
+        description: $description
+        collection_ids: $collections
+        repository_ids: $repository_ids
+      }
+    ) {
+      broken
+      created_at
+      description
+      domain
+      favicon_url
+      id
+      image_url
+      notes
+      stacks
+      tags
+      target_url
+      title
+      updated_at
+      viewing_preference
+      views
+    }
+  }
+`;
+export const PUBLIC_RANDOM_LINKS_QUERY = gql`
+  query GetPublicRandomLinks($limit: Int!) {
+    public_random_links(limit: $limit) {
+      id
+      title
+      description
+      target_url
+      domain
+      favicon_url
+      screenshot_url
+      created_at
+    }
+  }
+`;
+
+
+export const PUBLIC_LINKS_QUERY = gql`
+  query GetPublicLinks($ids: [String!]!) {
+    public_links(ids: $ids) {
+      id
+      title
+      description
+      target_url
+      domain
+      favicon_url
+      screenshot_url
+      created_at
+    }
+  }
+`;
+
+export const PUBLIC_RANDOM_LINKS_QUERY_STRING = `
+  query GetPublicRandomLinks {
+    public_random_links {
+      id
+      title
+      description
+      target_url
+      domain
+      favicon_url
+      screenshot_url
+      created_at
+    }
+  }
+`;
+
+export const PUBLIC_LINKS_QUERY_STRING = `
+  query GetPublicLinks($ids: [String!]!) {
+    public_links(ids: $ids) {
+      id
+      title
+      description
+      target_url
+      domain
+      favicon_url
+      screenshot_url
+      created_at
+    }
+  }
+`;
+
+export const MUTATION_CREATE_MULTIPLE_LINKS = () => gql`
+  mutation Add_links($links: [LinkInput!]!) {
+    add_links(input: { links: $links })
+  }
+`;

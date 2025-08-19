@@ -1,6 +1,6 @@
 "use client";
 
-import Component from "@/components/faq";
+import FAQs from "@/components/faq";
 import Features from "@/components/features";
 import Features1 from "@/components/features-1";
 import Hero from "@/components/hero";
@@ -13,11 +13,13 @@ import {
   AnimatePresence,
   motion,
   useInView,
+  useMotionValue,
   useMotionValueEvent,
   useScroll,
+  useSpring,
   useTransform,
 } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const steps = [
   {
@@ -74,28 +76,6 @@ export default function DiscoverWTFLanding() {
 
   const [activeText, setActiveText] = useState<number | null>(null);
 
-  // useMotionValueEvent(scrollYProgress, "change", (latestValue) => {
-  //   console.log(latestValue);
-
-  //   if (latestValue > 0.09) {
-  //     const scrollProgress = latestValue - 0.098;
-  //     const maxScrollRange = 0.25 - 0.098;
-  //     const stepProgress = scrollProgress / maxScrollRange; // 0 to 1
-
-  //     const adjustedProgress = stepProgress * steps.length;
-  //     const stepIndex = Math.floor(adjustedProgress);
-  //     console.log({ adjustedProgress, stepIndex });
-
-  //     if (stepIndex >= 0) {
-  //       setActiveText(stepIndex);
-  //     } else {
-  //       setActiveText(null);
-  //     }
-  //   } else {
-  //     setActiveText(null);
-  //   }
-  // });
-
   const bgs = [
     "bg-blue-500",
     "bg-red-500",
@@ -136,6 +116,30 @@ export default function DiscoverWTFLanding() {
       icon: "🔍",
     },
   ];
+  const icons = {
+    chrome: <img className="size-8" src={"/chrome.svg"} />,
+    edge: <img className="size-8" src={"/edge.svg"} />,
+    firefox: <img className="size-8" src={"/firefox.svg"} />,
+    safari: <img className="size-8" src={"/safari.svg"} />,
+    brave: <img className="size-8" src={"/brave.svg"} />,
+  };
+  const pos = [
+    { x: 600, y: -100 },
+    { x: -600, y: 0 }, // convert "30%" to px
+    { x: 400, y: window?.innerHeight * 0.3 },
+    { x: -450, y: -200 },
+    { x: -400, y: 200 },
+  ];
+  const mouseX = useMotionValue(window?.innerWidth / 2);
+  const mouseY = useMotionValue(window?.innerHeight / 2);
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window?.addEventListener("mousemove", handleMouseMove);
+    return () => window?.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
   return (
     <motion.div
@@ -143,10 +147,10 @@ export default function DiscoverWTFLanding() {
         // backgroundColor: isInView && activeText ? "black" : "white",
         transition: "background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
-      className={cn("min-h-screen w-full ")}
+      className={cn(
+        "min-h-screen w-full py-4 px-2 max-w-screen-2xl mx-auto relative "
+      )}
     >
-      <Navbar hide={isInView} />
-
       {/* <img
         src={"/hero2.png"}
         className="w-screen  md:-top-[200px] -top-[160px] h-screen md:h-auto object-cover  absolute -z-20"
@@ -154,85 +158,136 @@ export default function DiscoverWTFLanding() {
       {/* <div className=" w-screen flex -z-10 absolute items-center justify-center">
         <div className="max-w-md w-full h-[400px] bg-gradient-to-t from-black/80 via-black/60 to-black/50 blur-3xl inset-x-0"></div>
       </div> */}
-      <div className="md:min-h-[120vh] z-0 bg-blue-200 w-full relative flex items-center justify-center">
+      <div className="border border-neutral-100 pb-20 rounded-xl ">
+        <Navbar hide={isInView} />
+        {/* <div className=" pb-28 rounded-xl  z-0 overflow-hidden w-full relative flex flex-col items-center justify-start"> */}
         <Hero />
-        <img
-          src={
-            "https://framerusercontent.com/images/MGyRJiqZvcsd1To5R6KDZPibM.png"
-          }
-          className="w-screen  top-[200px] h-screen object-cover  absolute z-[1]"
-        />
-      </div>
 
-      <WebsitesMarqueeEffect />
-      <section className="w-full relative  mt-20  font-inter flex flex-col items-center justify-start min-screen ">
-        {/* <svg
-          pathLength={0}
-          className="absolute -top-[100px] inset-x-0 -z-10"
-          width="100%"
-          height="600"
-          viewBox="0 0 1440 1174"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <motion.path
-            pathLength={0}
-            d="M326.886 0C495.576 15.4318 671.319 75.6174 704.813 99.6287C738.306 123.64 1159.82 147.401 1506.16 283.117C1589.84 345.529 1628.63 366.619 1650.63 482.375C1672.63 598.13 1606.14 661.563 1572.64 733.597C1539.15 805.63 1482.2 941.799 1339.19 1052.55C1146.17 1138.79 1016.07 1166.39 738.306 1172.25C519.684 1177.73 386.048 1174.13 42.941 1104.52L39.7897 1102.59C-95.4875 1019.69 -172.303 972.618 -201.512 893.074C-208.139 786.229 -260.345 730.286 42.941 598.13C160.018 545.155 235.357 535.782 371.377 522.513L738.306 482.375H270.897C143.47 473.45 63.4144 460.96 -107.03 414.642C-239.803 262.991 -222.367 188.007 -68.0375 67.7332C49.7862 31.8873 113.508 11.1869 326.886 0Z"
-            fill="#FFE7CF"
-          />
-        </svg> */}
+        {/* {Object.values(icons).map((icon, index) => {
+            const baseX = pos[index].x;
+            const baseY = pos[index].y;
 
-        <div className="max-w-5xl flex  flex-col py-10 rounded-3xl  items-center justify-evenly w-full mx-auto">
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium md:font-semibold text-black text-center tracking-tight font-inter leading-tight">
-            What We’ve Done <br /> So Far,
-            <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-              Statistically
-            </span>{" "}
-          </h3>
-          <div className="flex flex-col md:flex-row  items-center justify-evenly mt-16 w-full ">
-            {discoverStats?.map((stat, i) => {
+            const offsetX = useTransform(
+              mouseX,
+              (val) => baseX + (val - window.innerWidth / 2) * 0.05
+            );
+            const offsetY = useTransform(
+              mouseY,
+              (val) => baseY + (val - window.innerHeight / 2) * 0.05
+            );
+
+            const x = useSpring(offsetX, { stiffness: 80, damping: 15 });
+            const y = useSpring(offsetY, { stiffness: 80, damping: 15 });
+
+            return (
+              <motion.div
+                key={index}
+                className="absolute  z-[8]"
+                // initial={{ ...pos[index] }}
+                style={{
+                  x,
+                  y,
+                }}
+                // transition={{
+                //   type: "spring",
+                //   stiffness: 100,
+                //   damping: 20,
+                // }}
+              >
+                <div className="size-2 bg-blue-800 rounded-full  even:-rotate-6 odd:-rotate-3 p-1 flex items-center justify-center"></div>
+              </motion.div>
+            );
+          })} */}
+
+        {/* <div className="w-full h-full absolute flex items-center z-[4] justify-center">
+            {Array.from({ length: 9 }).map((_, i) => {
               return (
                 <div
                   key={i}
-                  className="w-full flex flex-col mb-10 md:mb-0 items-center justify-center"
+                  className="w-full relative flex-1 last:border-none  h-full"
                 >
-                  {/* <span className="text-3xl font-bold">{stat?.icon}</span> */}
-                  <h3 className="tracking-tight text-5xl bg-gradient-to-t from-orange-600 via-orange-600 to-orange-400 text-transparent bg-clip-text font-bold ">
-                    {stat?.value}
-                  </h3>
-                  <span className="text-lg mt-2 text-neutral-600 font-medium tracking-tight">
-                    {stat?.label}
-                  </span>
+                  <div
+                    style={{
+                      height: `${140 + Math.abs(i - 4) * 100}px`, // Center index (i=5) is shortest, edges are tallest
+                    }}
+                    className="w-full absolute left-0 right-0 bg-gradient-to-t from-white via-white -bottom-6  to-transparent "
+                  ></div>
                 </div>
               );
             })}
-          </div>
+          </div> */}
+        <div className="w-full z-0 overflow-hidden relative h-[800px]">
+          <img
+            src={
+              "https://framerusercontent.com/images/MGyRJiqZvcsd1To5R6KDZPibM.png"
+            }
+            className="w-screen -bottom-[20%] opacity-80  h-full object-cover  z-[3]"
+          />
+
+          <div className="w-full absolute z-[4] h-1/3 -bottom-20 bg-gradient-to-t from-white via-white to-transparent" />
+          <WebsitesMarqueeEffect />
         </div>
-      </section>
-      <section
-        ref={ref}
-        className="w-full flex max-w-5xl mx-auto  flex-col-reverse md:flex-row py-[100px] relative items-start justify-center h-[250vh]"
-      >
-        <div className="max-w-xs mt-[60px] w-full mr-auto flex items-center justify-start ">
-          <div className="">
-            {steps.map((step, i) => {
-              return (
-                <Step setActiveText={setActiveText} step={step} key={i} i={i} />
-              );
-            })}
+
+        <section className="w-full relative  mt-20  font-inter flex flex-col items-center justify-start min-screen ">
+          <div className="max-w-5xl flex  flex-col py-10 rounded-3xl  items-center justify-evenly w-full mx-auto">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium md:font-semibold text-black text-center tracking-tight font-inter leading-tight">
+              What We’ve Done <br /> So Far,
+              <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
+                Statistically
+              </span>{" "}
+            </h3>
+            <div className="flex flex-col md:flex-row  items-center justify-evenly mt-16 w-full ">
+              {discoverStats?.map((stat, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="w-full flex flex-col mb-10 md:mb-0 items-center justify-center"
+                  >
+                    {/* <span className="text-3xl font-bold">{stat?.icon}</span> */}
+                    <h3 className="tracking-tight text-5xl bg-gradient-to-t from-orange-600 via-orange-600 to-orange-400 text-transparent bg-clip-text font-bold ">
+                      {stat?.value}
+                    </h3>
+                    <span className="text-lg mt-2 text-neutral-600 font-medium tracking-tight">
+                      {stat?.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div className="w-full md:w-1/2 h-screen sticky top-0 flex items-center justify-center ">
-          <motion.div
+        </section>
+        <section
+          ref={ref}
+          className="w-full flex flex-col-reverse md:flex-row py-[100px] relative items-start justify-center h-[320vh]"
+        >
+          <div className=" mt-[60px] w-full  flex items-center justify-center ">
+            <div className="mt-[160px] max-w-xs">
+              {steps.map((step, i) => {
+                return (
+                  <Step
+                    setActiveText={setActiveText}
+                    step={step}
+                    key={i}
+                    i={i}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div
             style={{
-              borderRadius: "3rem",
               transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
             className={cn(
-              "max-w-lg border border-neutral-200 w-full h-[300px] md:h-[500px] relative  overflow-hidden mx-auto  ",
+              "w-full h-[714px] sticky top-2 bottom-2 flex items-center justify-center ",
               activeText ? bgs[activeText] : "bg-white"
             )}
           >
+            {/* <motion.div
+              className={cn(
+                "max-w-lg border border-neutral-200 w-full h-[300px] md:h-[500px] relative xl:h-[80%]  overflow-hidden mx-auto  "
+              )}
+            > */}
             <AnimatePresence key={activeText}>
               {activeText === 1 && (
                 <div className="w-full h-full flex items-center justify-center relative overflow-hidden">
@@ -241,7 +296,7 @@ export default function DiscoverWTFLanding() {
                     animate={{ y: 0 }}
                     exit={{ y: 200 }}
                     src="/asset.mp4"
-                    className="border-[12px] border-black max-w-xs w-full absolute -bottom-[40%] mx-auto rounded-[3rem] aspect-[9/16] object-cover "
+                    className="border-[12px] border-black max-w-xs w-full absolute  mx-auto rounded-[3rem] aspect-[9/16] object-cover "
                     autoPlay
                     muted
                     loop
@@ -255,7 +310,7 @@ export default function DiscoverWTFLanding() {
                     animate={{ y: 0 }}
                     exit={{ y: 200 }}
                     src="/asset1.mp4"
-                    className="border-[12px] border-black max-w-xs w-full absolute -bottom-[40%] mx-auto rounded-[3rem] aspect-[9/16] object-cover "
+                    className="border-[12px] border-black max-w-xs w-full absolute  mx-auto rounded-[3rem] aspect-[9/16] object-cover "
                     autoPlay
                     muted
                     loop
@@ -276,7 +331,12 @@ export default function DiscoverWTFLanding() {
               {activeText === 4 && (
                 <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
                   <motion.div
-                    initial={{ y: 600, rotate: -10, opacity: 0.4, scale: 0.8 }}
+                    initial={{
+                      y: 600,
+                      rotate: -10,
+                      opacity: 0.4,
+                      scale: 0.8,
+                    }}
                     animate={{
                       y: 0,
                       rotate: [-8, -6, 0],
@@ -367,86 +427,46 @@ export default function DiscoverWTFLanding() {
                 </div>
               )}
             </AnimatePresence>
-          </motion.div>
-        </div>
-      </section>
-      <Features1 />
-      {/* <section className="max-w-5xl px-4 py-10  mx-auto min-h-screen">
-        <h3 className="font-3xl lg:text-4xl xl:text-5xl font-semibold text-black text-center tracking-tighter font-inter leading-tight">
-          Collect the best bits
-          <br />
-          <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-            of the Internet.
-          </span>
-        </h3>
-        <div className="w-full grid gap-6 mt-8 grid-cols-5 ">
-          {feats.map((feat, i) => {
-            return (
-              <div
-                key={i}
-                className={cn(
-                  "h-[340px] w-full bg-neutral-100 overflow-hidden relative rounded-3xl",
-                  i === 0 || i === 3 ? "col-span-2" : "col-span-3"
-                )}
-              >
-                <div className="flex items-center justify-center p-6">
-                  <h4 className="text-lg font-medium">{feat?.title}</h4>
-                </div>
-                <div className=" w-full h-full ">
-                  {i === 1 && (
-                    <>
-                      <div className="absolute -top-6 left-2 flex flex-col space-y-4 px-4">
-                        {Array.from({ length: 12 })?.map((_, i) => {
-                          return (
-                            <div
-                              key={i}
-                              className="size-14 rounded-full bg-neutral-300"
-                            />
-                          );
-                        })}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section> */}
-      <Features />
-      <section className="w-full px-4   mx-auto py-10">
-        <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium md:font-semibold text-black text-center tracking-tighter font-inter leading-tight">
-          Curious people are curating.
-          <br />
-          <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-            Just follow along.
-          </span>
-          <div className="w-full max-w-5xl mx-auto mt-8 flex justify-center items-center">
-            {Array.from({ length: 4 })?.map((_, i) => {
-              return (
-                <div key={i} className="w-full ">
-                  <img
-                    style={{
-                      scale: i <= 1 ? (i == 1 ? 0.5 : 0.55) : 0.6,
-                    }}
-                    src={`/f${i + 1}.avif`}
-                  />
-                </div>
-              );
-            })}
+            {/* </motion.div> */}
           </div>
-        </h3>
-      </section>
-      <Testimonials />
-      <Component />
-      <div className="relative w-full  py-20 px-4 md:h-screen z-10 bg-gradient-to-t from-white via-white/60 to-transparent">
-        <div className="absolute inset-0 w-full h-full">
-          <div className="absolute top-0 left-1/4 w-80 md:w-96 h-80 md:h-96 bg-gradient-to-r from-indigo-400/30 to-blue-400/30 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded-full blur-3xl"></div>
+        </section>
+        <Features1 />
+
+        <Features />
+        <section className="w-full px-4   mx-auto py-10">
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium md:font-semibold text-black text-center tracking-tighter font-inter leading-tight">
+            Curious people are curating.
+            <br />
+            <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
+              Just follow along.
+            </span>
+            <div className="w-full max-w-5xl mx-auto mt-8 flex justify-center items-center">
+              {Array.from({ length: 4 })?.map((_, i) => {
+                return (
+                  <div key={i} className="w-full ">
+                    <img
+                      style={{
+                        scale: i <= 1 ? (i == 1 ? 0.5 : 0.55) : 0.6,
+                      }}
+                      src={`/f${i + 1}.avif`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </h3>
+        </section>
+        <Testimonials />
+        <FAQs />
+        <div className="relative w-full  py-20 px-4 md:h-screen z-[1] bg-gradient-to-t from-white via-white/60 to-transparent">
+          <div className="absolute overflow-x-clip inset-0 w-full h-full">
+            <div className="absolute top-0 left-1/4 w-52 md:w-96 h-52 md:h-96 bg-gradient-to-r from-indigo-400/30 to-blue-400/30 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded-full blur-3xl"></div>
+          </div>
+          <h2 className="text-8xl md:text-9xl font-aspekta text-center w-full absolute -bottom-8 lg:text-[12rem] xl:text-[18.8rem] font-black bg-gradient-to-t from-white/80 via-black/20 inset-x-0 to-transparent bg-clip-text text-transparent leading-none tracking-tighter">
+            Endless <br className="flex lg:hidden" /> WTF's
+          </h2>
         </div>
-        <h2 className="text-8xl md:text-9xl font-aspekta text-center w-full absolute -bottom-8 lg:text-[12rem] xl:text-[18.8rem] font-black bg-gradient-to-t from-white/80 via-black/20 inset-x-0 to-transparent bg-clip-text text-transparent leading-none tracking-tighter">
-          Endless <br className="flex lg:hidden" /> WTF's
-        </h2>
       </div>
     </motion.div>
   );

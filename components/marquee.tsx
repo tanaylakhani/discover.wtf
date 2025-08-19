@@ -66,7 +66,7 @@ const WebsitesMarqueeEffect = () => {
     /* Marquee effect with 2 rows moving in opposite directions */
   }
   return (
-    <div className="relative flex w-full flex-col items-center justify-center overflow-x-hidden">
+    <div className="relative z-[10] flex w-full flex-col items-center justify-center overflow-x-hidden">
       <Marquee pauseOnHover className="mb-2 [--duration:60s] gap-4">
         {[...cards]?.map((card, i) => {
           return (

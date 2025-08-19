@@ -1,11 +1,13 @@
 import {
   boolean,
   index,
+  jsonb,
   pgTable,
   primaryKey,
   text,
   timestamp,
   uuid,
+  varchar,
 } from "drizzle-orm/pg-core";
 
 export const likes = pgTable(
@@ -22,15 +24,34 @@ export const likes = pgTable(
   })
 );
 
+export type TCommentAuthor = {
+  id: string;
+  name: string | null | undefined;
+  username: string | null | undefined;
+  email: string;
+  avatar: string | null | undefined;
+};
+
 export const comments = pgTable("comments", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id").notNull(),
   linkId: text("link_id").notNull(),
   content: text("content").notNull(),
+  user: jsonb("user").$type<TCommentAuthor>().notNull(),
   isPrivate: boolean("is_private").default(false).notNull(),
   commentedAt: timestamp("commented_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+});
+
+export const commentMedia = pgTable("comment_media", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  commentId: uuid("comment_id")
+    .references(() => comments.id)
+    .notNull(),
+  type: varchar("type", { length: 16 }).notNull(), // image | video | file
+  url: text("url").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Bookmarks table

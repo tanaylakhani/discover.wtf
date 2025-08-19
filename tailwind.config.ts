@@ -25,6 +25,9 @@ const config: Config = {
         "instrument-serif": ["var(--font-instrument-serif)", "serif"],
         "instrument-sans": ["var(--font-instrument-sans)", "sans-serif"],
       },
+      fontSize: {
+        xxs: ["0.65rem", { lineHeight: "1rem" }],
+      },
       // colors: {
       //   background: "hsl(var(--background))",
       //   foreground: "hsl(var(--foreground))",

@@ -1,20 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  Variants,
-} from "framer-motion";
+import { motion, useInView, Variants } from "framer-motion";
+import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+import React, { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import Heading from "./general-components";
-import { Button } from "./ui/button";
-import Image from "next/image";
-import { Star } from "lucide-react";
 
 const badgeVariants: Variants = {
   initial: {
@@ -28,82 +20,19 @@ const badgeVariants: Variants = {
 };
 
 const heading = `Escape the Algorithm \n Discover Software that Matters`;
-const paragraph = `Don’t wait for the algorithm. Find powerful tools, made \n by indie hackers, before they hit the mainstream.`;
+const paragraph = `Because the algorithm assumes what you \n want to see. We do not`;
+// const paragraph = `Don’t wait for the algorithm. Find powerful tools, made \n by indie hackers, before they hit the mainstream.`;
 const Hero = () => {
   const { data } = useSession();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const icons = {
-    chrome: <img className="size-8" src={"/chrome.svg"} />,
-    edge: <img className="size-8" src={"/edge.svg"} />,
-    firefox: <img className="size-8" src={"/firefox.svg"} />,
-    safari: <img className="size-8" src={"/safari.svg"} />,
-    brave: <img className="size-8" src={"/brave.svg"} />,
-  };
-  const pos = [
-    { x: 600, y: -100 },
-    { x: -600, y: 0 }, // convert "30%" to px
-    { x: 400, y: window?.innerHeight * 0.3 },
-    { x: -450, y: -200 },
-    { x: -400, y: 200 },
-  ];
-
-  const mouseX = useMotionValue(window?.innerWidth / 2);
-  const mouseY = useMotionValue(window?.innerHeight / 2);
   const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window?.addEventListener("mousemove", handleMouseMove);
-    return () => window?.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <section
       ref={containerRef}
-      className="flex flex-col  items-center justify-center   px-4 h-[80vh] md:h-[100dvh] relative overflow-hidden"
+      className="flex flex-col z-[6] items-center justify-center   px-4 mt-36 relative overflow-hidden"
     >
-      {/* {Object.values(icons).map((icon, index) => {
-        const baseX = pos[index].x;
-        const baseY = pos[index].y;
-
-        const offsetX = useTransform(
-          mouseX,
-          (val) => baseX + (val - window.innerWidth / 2) * 0.02
-        );
-        const offsetY = useTransform(
-          mouseY,
-          (val) => baseY + (val - window.innerHeight / 2) * 0.02
-        );
-
-        const x = useSpring(offsetX, { stiffness: 80, damping: 15 });
-        const y = useSpring(offsetY, { stiffness: 80, damping: 15 });
-
-        return (
-          <motion.div
-            key={index}
-            className="absolute  z-[2]"
-            // initial={{ ...pos[index] }}
-            style={{
-              x,
-              y,
-            }}
-            // transition={{
-            //   type: "spring",
-            //   stiffness: 100,
-            //   damping: 20,
-            // }}
-          >
-            <div className="size-10 bg-white rounded-full  even:-rotate-6 odd:-rotate-3 border border-neutral-200 shadow-xl p-1 flex items-center justify-center">
-              {icon}
-            </div>
-          </motion.div>
-        );
-      })} */}
-
       <motion.div className="container z-[2] relative mx-auto text-center max-w-5xl flex flex-col items-center justify-center   h-full">
         <div className="mb-8 font-inter  text-neutral-800 dark:text-neutral-200 leading-relaxed  flex flex-col items-center justify-center">
           <motion.div
@@ -116,10 +45,10 @@ const Hero = () => {
               " mb-6 flex z-[2] bg-orange-50  w-fit dark:bg-neutral-900 dark:border-neutral-800 backdrop-blur-lg text-sm text-orange-600 font-medium items-center justify-center border  border-orange-200 px-1 static shadow-lg py-1  rounded-3xl "
             )}
           >
-            <div className="flex text-xs text-white bg-orange-600 font-medium px-3 items-center justify-center py-0.5 rounded-full tracking-tight">
+            <div className="flex text-xxs md:text-xs text-white bg-orange-600 font-medium px-3 items-center justify-center py-0.5 rounded-full tracking-tight">
               New
             </div>
-            <span className="mx-2 text-sm tracking-tight font-medium font-inter w-full">
+            <span className="mx-2 text-xs md:text-sm tracking-tight font-medium font-inter w-full">
               Loved by over 1000+ users
             </span>
             {/* </>
@@ -129,7 +58,7 @@ const Hero = () => {
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="md:text-lg lg:text-xl leading-tight items-center justify-center flex flex-wrap md:flex-col font-medium text-neutral-700 dark:text-neutral-400 font-inter tracking-tight"
+            className="md:text-lg px-6 md:px-0 lg:text-xl leading-tight items-center justify-center flex flex-wrap md:flex-col font-medium text-neutral-600 dark:text-neutral-400 font-inter tracking-tight"
           >
             {paragraph.split(isDesktop ? "\n" : " ").map((line, i) => (
               <motion.span key={i} className="inline-block mr-1 md:mr-0">
@@ -147,14 +76,14 @@ const Hero = () => {
           }}
           initial="initial"
           animate="animate"
-          className="flex flex-col mt-10 relative items-center justify-start"
+          className="flex flex-col relative items-center justify-start"
         >
-          <div className="shadow-sm shadow-orange-500 hover:shadow-2xl delay-75 cursor-pointer duration-300 transition-all hover:shadow-orange-500 border flex flex-row items-center justify-center border-orange-100 p-3 rounded-2xl bg-orange-50">
+          <div className="delay-75 border-beam cursor-pointer duration-300 transition-all  flex flex-row items-center justify-center  p-3 rounded-2xl bg-white">
             <Image
               width={100}
               height={100}
               alt=""
-              className="aspect-square object-cover"
+              className="aspect-square border border-neutral-200 rounded-xl object-cover"
               src={"/qr.png"}
             />
             <div className="ml-4 flex flex-col h-full py-2 items-start justify-start pr-2">
@@ -218,7 +147,7 @@ export function WordsPullUp({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <Heading  className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif font-thin inline-block mb-6 leading-[1]  md:leading-none ">
+    <Heading className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif font-thin inline-block mb-6 leading-[1]  md:leading-none ">
       {splittedText.map((current, i) => {
         if (current === "\n") {
           return <br className="" key={i} />;
