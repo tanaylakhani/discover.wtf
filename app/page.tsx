@@ -279,7 +279,7 @@ export default function DiscoverWTFLanding() {
               transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
             className={cn(
-              "w-full h-[714px] sticky top-2 bottom-2 flex items-center justify-center ",
+              "w-full h-[714px] sticky rounded-3xl top-2 bottom-2 flex items-center justify-center ",
               activeText ? bgs[activeText] : "bg-white"
             )}
           >
