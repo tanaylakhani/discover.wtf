@@ -5,16 +5,17 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth-client";
 import { useRef, useState } from "react";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 const Navbar = ({ hide }: { hide: boolean }) => {
   const { scrollYProgress, scrollY } = useScroll({
     axis: "y",
   });
   const [scrolledPast, setScrolledPast] = useState(false);
-  const { data } = useSession();
+  const { user, isAuthenticated } = useAuth();
   const prevScrollY = useRef(0);
   const [goingUp, setGoingUp] = useState(false);
 
@@ -38,11 +39,11 @@ const Navbar = ({ hide }: { hide: boolean }) => {
   });
 
   const icons = {
-    chrome: <img className="size-6" src={"/chrome.svg"} />,
-    edge: <img className="size-8" src={"/edge.svg"} />,
-    firefox: <img className="size-8" src={"/firefox.svg"} />,
-    safari: <img className="size-8" src={"/safari.svg"} />,
-    brave: <img className="size-8" src={"/brave.svg"} />,
+    chrome: <Image className="size-6" src="/chrome.svg" alt="Chrome" width={24} height={24} />,
+    edge: <Image className="size-8" src="/edge.svg" alt="Edge" width={32} height={32} />,
+    firefox: <Image className="size-8" src="/firefox.svg" alt="Firefox" width={32} height={32} />,
+    safari: <Image className="size-8" src="/safari.svg" alt="Safari" width={32} height={32} />,
+    brave: <Image className="size-8" src="/brave.svg" alt="Brave" width={32} height={32} />,
   };
 
   return (
@@ -67,11 +68,13 @@ const Navbar = ({ hide }: { hide: boolean }) => {
                 </span>
                 <div className="w-fit ">
                   <Button className="group md:max-w-xs w-full relative px-6 h-10 py-3 font-semibold text-white  border-0 rounded-xl  transition-all [&_svg]:size-4 bg-orange-500 duration-300 hover:scale-105 hover:shadow-2xl">
-                    <img
+                    <Image
                       draggable={false}
-                      className="group-hover:opacity-100 select-none absolute opacity-0 "
-                      src="stars.gif"
-                      alt=""
+                      className="group-hover:opacity-100 select-none absolute opacity-0"
+                      src="/stars.gif"
+                      alt="Stars animation"
+                      width={100}
+                      height={40}
                     />
                     <motion.div className="relative font-inter z-10 flex items-center space-x-2">
                       {icons["chrome"]}

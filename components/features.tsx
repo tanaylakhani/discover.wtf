@@ -116,25 +116,12 @@ const Features = () => {
   const tabs = ["All", "Collections", "Archived", "Shared"];
   return (
     <section className="font-inter max-w-5xl mx-auto px-4 py-16">
-      {/* <motion.h2
-        initial={{ y: 60, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="text-3xl md:text-4xl lg:text-5xl font-medium md:font-semibold text-black text-center tracking-tighter font-inter leading-tight"
-      >
-        Discovery Isn’t a Feature
-        <br />
-        <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-          It's the Product.
-        </span>
-      </motion.h2> */}
       <motion.h2
         initial={{ y: 60, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
-        className="font-3xl lg:text-4xl xl:text-5xl font-semibold text-black text-center tracking-tighter font-inter leading-tight"
+        className="text-3xl lg:text-4xl xl:text-5xl font-semibold text-black text-center tracking-tighter font-inter leading-tight"
       >
         Collect the best bits
         <br />
@@ -142,31 +129,6 @@ const Features = () => {
           of the Internet.
         </span>
       </motion.h2>
-      {/* <motion.h2
-        initial={{ y: 60, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="text-3xl font-medium text-neutral-900 text-center tracking-tighter font-inter leading-tight"
-      >
-        <span>
-          {" "}
-          <span className="font-instrument-serif font-thin text-4xl italic mr-1  tracking-normal">
-            Discovery
-          </span>{" "}
-          Isn’t a Feature
-        </span>
-
-        <br />
-        <span>It's the Product.</span>
-      </motion.h2> */}
-      {/* <h3 className="font-3xl lg:text-4xl xl:text-5xl font-semibold text-black text-center tracking-tighter font-inter leading-tight">
-        Collect the best bits
-        <br />
-        <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-          of the Internet.
-        </span>
-      </h3> */}
       <motion.div
         initial={{ y: 160, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
@@ -290,7 +252,7 @@ type FeatureProps = {
 function Card1({ isHovered }: FeatureProps) {
   const [hovered, setHovered] = useState(isHovered);
   useEffect(() => {
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
       setHovered((prev) => !prev);
     }, 2000);
     return () => clearInterval(interval);
@@ -365,7 +327,7 @@ function Card2({ isHovered }: FeatureProps) {
 
   useEffect(() => {
     if (!inView) return;
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
       setDynamic((prev) => !prev);
     }, 3200);
     return () => clearInterval(interval);

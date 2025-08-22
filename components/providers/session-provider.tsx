@@ -1,9 +1,8 @@
 "use client";
 
 import type React from "react";
-
-import { SessionProvider } from "next-auth/react";
+// No provider needed for Better Auth - it works with React Query under the hood
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return <>{children}</>;
 }

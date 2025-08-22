@@ -9,6 +9,7 @@ import Navbar from "@/components/navbar";
 import Testimonials from "@/components/testimonials";
 import { cn } from "@/lib/utils";
 import Lenis from "@studio-freight/lenis";
+import Image from "next/image";
 import {
   AnimatePresence,
   motion,
@@ -16,7 +17,6 @@ import {
   useMotionValue,
   useMotionValueEvent,
   useScroll,
-  useSpring,
   useTransform,
 } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
@@ -84,20 +84,6 @@ export default function DiscoverWTFLanding() {
     "bg-indigo-500",
   ];
 
-  const feats = [
-    {
-      title: "Daily Digests",
-    },
-    {
-      title: "Read minds. Follow Curators.",
-    },
-    {
-      title: "Play with Lists. Playlists.",
-    },
-    {
-      title: "Sharing is caring",
-    },
-  ];
 
   const discoverStats = [
     {
@@ -116,29 +102,17 @@ export default function DiscoverWTFLanding() {
       icon: "🔍",
     },
   ];
-  const icons = {
-    chrome: <img className="size-8" src={"/chrome.svg"} />,
-    edge: <img className="size-8" src={"/edge.svg"} />,
-    firefox: <img className="size-8" src={"/firefox.svg"} />,
-    safari: <img className="size-8" src={"/safari.svg"} />,
-    brave: <img className="size-8" src={"/brave.svg"} />,
-  };
-  const pos = [
-    { x: 600, y: -100 },
-    { x: -600, y: 0 }, // convert "30%" to px
-    { x: 400, y: window?.innerHeight * 0.3 },
-    { x: -450, y: -200 },
-    { x: -400, y: 200 },
-  ];
-  const mouseX = useMotionValue(window?.innerWidth / 2);
-  const mouseY = useMotionValue(window?.innerHeight / 2);
+  const mouseX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
+  const mouseY = useMotionValue(typeof window !== "undefined" ? window.innerHeight / 2 : 0);
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
-    window?.addEventListener("mousemove", handleMouseMove);
-    return () => window?.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   return (
@@ -151,77 +125,18 @@ export default function DiscoverWTFLanding() {
         "min-h-screen w-full py-4 px-2 max-w-screen-2xl mx-auto relative "
       )}
     >
-      {/* <img
-        src={"/hero2.png"}
-        className="w-screen  md:-top-[200px] -top-[160px] h-screen md:h-auto object-cover  absolute -z-20"
-      /> */}
-      {/* <div className=" w-screen flex -z-10 absolute items-center justify-center">
-        <div className="max-w-md w-full h-[400px] bg-gradient-to-t from-black/80 via-black/60 to-black/50 blur-3xl inset-x-0"></div>
-      </div> */}
       <div className="border border-neutral-100 pb-20 rounded-xl ">
         <Navbar hide={isInView} />
-        {/* <div className=" pb-28 rounded-xl  z-0 overflow-hidden w-full relative flex flex-col items-center justify-start"> */}
         <Hero />
 
-        {/* {Object.values(icons).map((icon, index) => {
-            const baseX = pos[index].x;
-            const baseY = pos[index].y;
 
-            const offsetX = useTransform(
-              mouseX,
-              (val) => baseX + (val - window.innerWidth / 2) * 0.05
-            );
-            const offsetY = useTransform(
-              mouseY,
-              (val) => baseY + (val - window.innerHeight / 2) * 0.05
-            );
-
-            const x = useSpring(offsetX, { stiffness: 80, damping: 15 });
-            const y = useSpring(offsetY, { stiffness: 80, damping: 15 });
-
-            return (
-              <motion.div
-                key={index}
-                className="absolute  z-[8]"
-                // initial={{ ...pos[index] }}
-                style={{
-                  x,
-                  y,
-                }}
-                // transition={{
-                //   type: "spring",
-                //   stiffness: 100,
-                //   damping: 20,
-                // }}
-              >
-                <div className="size-2 bg-blue-800 rounded-full  even:-rotate-6 odd:-rotate-3 p-1 flex items-center justify-center"></div>
-              </motion.div>
-            );
-          })} */}
-
-        {/* <div className="w-full h-full absolute flex items-center z-[4] justify-center">
-            {Array.from({ length: 9 }).map((_, i) => {
-              return (
-                <div
-                  key={i}
-                  className="w-full relative flex-1 last:border-none  h-full"
-                >
-                  <div
-                    style={{
-                      height: `${140 + Math.abs(i - 4) * 100}px`, // Center index (i=5) is shortest, edges are tallest
-                    }}
-                    className="w-full absolute left-0 right-0 bg-gradient-to-t from-white via-white -bottom-6  to-transparent "
-                  ></div>
-                </div>
-              );
-            })}
-          </div> */}
         <div className="w-full z-0 overflow-hidden relative h-[800px]">
-          <img
-            src={
-              "https://framerusercontent.com/images/MGyRJiqZvcsd1To5R6KDZPibM.png"
-            }
-            className="w-screen -bottom-[20%] opacity-80  h-full object-cover  z-[3]"
+          <Image
+            src="https://framerusercontent.com/images/MGyRJiqZvcsd1To5R6KDZPibM.png"
+            alt="Background illustration"
+            fill
+            className="opacity-80 object-cover z-[3]"
+            priority
           />
 
           <div className="w-full absolute z-[4] h-1/3 -bottom-20 bg-gradient-to-t from-white via-white to-transparent" />
@@ -324,7 +239,7 @@ export default function DiscoverWTFLanding() {
                     animate={{ y: 0 }}
                     exit={{ y: 200 }}
                   >
-                    <img src="/asset2.png" alt="" />
+                    <Image src="/asset2.png" alt="Discovery feature illustration" width={400} height={300} />
                   </motion.div>
                 </div>
               )}
@@ -358,9 +273,11 @@ export default function DiscoverWTFLanding() {
                         ease: "easeInOut",
                       }}
                     >
-                      <img
+                      <Image
                         src="https://spoil.me/images/meta/og-image-1200-630-v4.png"
-                        alt=""
+                        alt="Spoil Me website preview"
+                        width={260}
+                        height={150}
                         className="w-full object-cover rounded-3xl border border-neutral-200"
                       />
                       <div className="flex px-2 flex-col mt-4">
@@ -444,11 +361,14 @@ export default function DiscoverWTFLanding() {
               {Array.from({ length: 4 })?.map((_, i) => {
                 return (
                   <div key={i} className="w-full ">
-                    <img
+                    <Image
                       style={{
                         scale: i <= 1 ? (i == 1 ? 0.5 : 0.55) : 0.6,
                       }}
                       src={`/f${i + 1}.avif`}
+                      alt={`Feature ${i + 1} illustration`}
+                      width={300}
+                      height={200}
                     />
                   </div>
                 );

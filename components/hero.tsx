@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { motion, useInView, Variants } from "framer-motion";
 import { Star } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth-client";
 import Image from "next/image";
 import React, { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
@@ -19,11 +19,11 @@ const badgeVariants: Variants = {
   },
 };
 
-const heading = `Escape the Algorithm \n Discover Software that Matters`;
+const heading = `Escape the Algorithm \n Discover the Internet that Matters`;
 const paragraph = `Because the algorithm assumes what you \n want to see. We do not`;
 // const paragraph = `Don’t wait for the algorithm. Find powerful tools, made \n by indie hackers, before they hit the mainstream.`;
 const Hero = () => {
-  const { data } = useSession();
+  const { user, isAuthenticated } = useAuth();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -93,7 +93,7 @@ const Hero = () => {
               <div className="w-full flex mt-2 items-center justify-start">
                 {Array.from({ length: 5 }).map((_, i) => {
                   return (
-                    <Star strokeWidth={0} className="size-4 fill-orange-400" />
+                    <Star key={i} strokeWidth={0} className="size-4 fill-orange-400" />
                   );
                 })}
               </div>

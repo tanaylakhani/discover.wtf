@@ -31,9 +31,54 @@ const instrument_sans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "discover.wtf - Discover the Internet's Best",
-  description: "Curated websites, tools, and resources tailored just for you.",
-  generator: "v0.dev",
+  title: {
+    default: "discover.wtf - Discover the Internet's Best",
+    template: "%s | discover.wtf"
+  },
+  description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems. No algorithm limits - just pure discovery of the web's best content.",
+  keywords: [
+    "web discovery",
+    "curated websites", 
+    "internet discovery",
+    "web tools",
+    "browser extension",
+    "website curation",
+    "indie web",
+    "discovery platform"
+  ],
+  authors: [{ name: "discover.wtf team" }],
+  creator: "discover.wtf",
+  publisher: "discover.wtf",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://discover.wtf",
+    title: "discover.wtf - Discover the Internet's Best",
+    description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
+    siteName: "discover.wtf",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "discover.wtf - Discover the Internet's Best",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "discover.wtf - Discover the Internet's Best",
+    description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
+    images: ["/og-image.png"],
+  },
+  metadataBase: new URL("https://discover.wtf"),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({
