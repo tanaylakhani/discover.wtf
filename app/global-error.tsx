@@ -46,7 +46,11 @@ export default function GlobalError({
               </Button>
               <Button
                 variant="outline"
-                onClick={() => window.location.href = "/"}
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.location.href = "/";
+                  }
+                }}
               >
                 Go Home
               </Button>

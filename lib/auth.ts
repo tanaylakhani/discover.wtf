@@ -10,8 +10,8 @@ export const auth = betterAuth({
   }),
   
   // Environment variables
-  secret: env.NEXTAUTH_SECRET,
-  baseURL: env.NEXTAUTH_URL || "http://localhost:3001",
+  secret: env.BETTER_AUTH_SECRET,
+  baseURL: env.BETTER_AUTH_URL || "http://localhost:3001",
   
   // Session configuration (mapping from NextAuth schema)
   session: {

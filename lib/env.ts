@@ -4,9 +4,9 @@ const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().url("DATABASE_URL must be a valid URL"),
   
-  // Auth
-  NEXTAUTH_SECRET: z.string().min(1, "NEXTAUTH_SECRET is required"),
-  NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL").optional(),
+  // Better Auth
+  BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
+  BETTER_AUTH_URL: z.string().url("BETTER_AUTH_URL must be a valid URL").optional(),
   
   // Google AI
   GOOGLE_API_KEY: z.string().min(1, "GOOGLE_API_KEY is required"),
@@ -26,8 +26,8 @@ let env: Env;
 try {
   env = envSchema.parse({
     DATABASE_URL: process.env.DATABASE_URL,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,

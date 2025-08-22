@@ -45,12 +45,18 @@ npx drizzle-kit migrate
 ```
 
 ### 2. Environment Variables
-Add these to your `.env` file:
+Update your `.env` file with the new Better Auth variables:
 ```env
+# Better Auth (rename from NEXTAUTH_*)
+BETTER_AUTH_SECRET="your-secret-key-here-at-least-32-chars-long"
+BETTER_AUTH_URL="http://localhost:3001"
+
 # OAuth (if using Google sign-in)
 GOOGLE_CLIENT_ID="your-google-oauth-client-id"
 GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
 ```
+
+**Important:** If you had `NEXTAUTH_SECRET` and `NEXTAUTH_URL` in your `.env`, rename them to `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`.
 
 ### 3. Google OAuth Setup (if needed)
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
