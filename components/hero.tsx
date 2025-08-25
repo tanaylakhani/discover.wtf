@@ -76,7 +76,7 @@ const Hero = () => {
           }}
           initial="initial"
           animate="animate"
-          transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.1, ease: "easeOut" }}
           className="flex flex-col relative items-center justify-start"
         >
           <div className="delay-75 border-beam cursor-pointer duration-300 transition-all  flex flex-row items-center justify-center  p-3 rounded-2xl bg-white">
@@ -94,7 +94,11 @@ const Hero = () => {
               <div className="w-full flex mt-2 items-center justify-start">
                 {Array.from({ length: 5 }).map((_, i) => {
                   return (
-                    <Star key={i} strokeWidth={0} className="size-4 fill-orange-400" />
+                    <Star
+                      key={i}
+                      strokeWidth={0}
+                      className="size-4 fill-orange-400"
+                    />
                   );
                 })}
               </div>
@@ -161,6 +165,7 @@ export function WordsPullUp({
             initial="initial"
             animate={isInView ? "animate" : ""}
             custom={i}
+            className="relative "
           >
             {current}
           </motion.div>
