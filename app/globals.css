@@ -50,10 +50,17 @@
   }
 }
 
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
 @layer utilities {
   .border-beam {
     position: relative;
     z-index: 0;
+    overflow: hidden;
   }
 
   .border-beam::before {
@@ -61,14 +68,19 @@
     position: absolute;
     inset: 0;
     padding: 2px;
-    background: linear-gradient(90deg, #00f0ff, #ff00c8, #00f0ff);
+    background: linear-gradient(90deg, #ea580c, #f59e0b, #ea580c);
     background-size: 200% auto;
     animation: borderBeam 2s linear infinite;
     z-index: -1;
-    border-radius: 0.75rem; /* matches rounded-xl */
+    border-radius: inherit;
     -webkit-mask: linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+  }
+  
+  /* Better animation performance */
+  .animate-in {
+    animation-fill-mode: both;
   }
 }

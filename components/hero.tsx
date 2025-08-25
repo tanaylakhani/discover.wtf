@@ -58,10 +58,17 @@ const Hero = () => {
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
             className="md:text-lg px-6 md:px-0 lg:text-xl leading-tight items-center justify-center flex flex-wrap md:flex-col font-medium text-neutral-600 dark:text-neutral-400 font-inter tracking-tight"
           >
             {paragraph.split(isDesktop ? "\n" : " ").map((line, i) => (
-              <motion.span key={i} className="inline-block mr-1 md:mr-0">
+              <motion.span 
+                key={i} 
+                className="inline-block mr-1 md:mr-0"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + i * 0.1, duration: 0.4 }}
+              >
                 {line}
               </motion.span>
             ))}
@@ -76,6 +83,7 @@ const Hero = () => {
           }}
           initial="initial"
           animate="animate"
+          transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
           className="flex flex-col relative items-center justify-start"
         >
           <div className="delay-75 border-beam cursor-pointer duration-300 transition-all  flex flex-row items-center justify-center  p-3 rounded-2xl bg-white">
@@ -140,31 +148,36 @@ export function WordsPullUp({
       y: 0,
       opacity: 1,
       transition: {
-        delay: i * 0.1,
+        delay: i * 0.15,
+        duration: 0.6,
+        ease: "easeOut",
       },
     }),
   };
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
   return (
     <Heading className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif font-thin inline-block mb-6 leading-[1]  md:leading-none ">
-      {splittedText.map((current, i) => {
-        if (current === "\n") {
-          return <br className="" key={i} />;
-        }
-        return (
-          <motion.div
-            key={i}
-            ref={ref}
-            variants={pullupVariant}
-            initial="initial"
-            animate={isInView ? "animate" : ""}
-            custom={i}
-          >
-            {current}
-          </motion.div>
-        );
-      })}
+      <div ref={ref}>
+        {splittedText.map((current, i) => {
+          if (current === "\n") {
+            return <br className="" key={i} />;
+          }
+          return (
+            <motion.div
+              key={i}
+              variants={pullupVariant}
+              initial="initial"
+              animate={isInView ? "animate" : "initial"}
+              custom={i}
+              className="inline-block"
+            >
+              {current}
+            </motion.div>
+          );
+        })}
+      </div>
     </Heading>
   );
 }
