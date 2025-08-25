@@ -8,7 +8,7 @@ type HeadingProps = {
 
 const Heading = ({ children, className }: HeadingProps) => {
   return (
-    <h1 className={cn("text-5xl font-instrument-serif font-thin", className)}>{children}</h1>
+    <div className={cn("text-5xl  font-inter  ", className)}>{children}</div>
   );
 };
 

@@ -58,17 +58,10 @@ const Hero = () => {
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
             className="md:text-lg px-6 md:px-0 lg:text-xl leading-tight items-center justify-center flex flex-wrap md:flex-col font-medium text-neutral-600 dark:text-neutral-400 font-inter tracking-tight"
           >
             {paragraph.split(isDesktop ? "\n" : " ").map((line, i) => (
-              <motion.span 
-                key={i} 
-                className="inline-block mr-1 md:mr-0"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.1, duration: 0.4 }}
-              >
+              <motion.span key={i} className="inline-block mr-1 md:mr-0">
                 {line}
               </motion.span>
             ))}
@@ -148,36 +141,31 @@ export function WordsPullUp({
       y: 0,
       opacity: 1,
       transition: {
-        delay: i * 0.15,
-        duration: 0.6,
-        ease: "easeOut",
+        delay: i * 0.1,
       },
     }),
   };
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
+  const isInView = useInView(ref, { once: true });
   return (
     <Heading className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif font-thin inline-block mb-6 leading-[1]  md:leading-none ">
-      <div ref={ref}>
-        {splittedText.map((current, i) => {
-          if (current === "\n") {
-            return <br className="" key={i} />;
-          }
-          return (
-            <motion.div
-              key={i}
-              variants={pullupVariant}
-              initial="initial"
-              animate={isInView ? "animate" : "initial"}
-              custom={i}
-              className="inline-block"
-            >
-              {current}
-            </motion.div>
-          );
-        })}
-      </div>
+      {splittedText.map((current, i) => {
+        if (current === "\n") {
+          return <br className="" key={i} />;
+        }
+        return (
+          <motion.div
+            key={i}
+            ref={ref}
+            variants={pullupVariant}
+            initial="initial"
+            animate={isInView ? "animate" : ""}
+            custom={i}
+          >
+            {current}
+          </motion.div>
+        );
+      })}
     </Heading>
   );
 }
