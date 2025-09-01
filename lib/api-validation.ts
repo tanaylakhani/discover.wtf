@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { rateLimit, getClientIP, getRateLimitHeaders, RateLimitConfig } from "./rate-limit";
+import {
+  rateLimit,
+  getClientIP,
+  getRateLimitHeaders,
+  RateLimitConfig,
+} from "./rate-limit";
+import { UIMessage } from "ai";
 
 // Common validation schemas
 export const tokenSchema = z.string().min(1, "Token is required");
@@ -8,12 +14,11 @@ export const linkIdSchema = z.string().min(1, "Link ID is required");
 export const userIdSchema = z.string().min(1, "User ID is required");
 
 // Chat request validation
+// Infer the type of UIMessage from the ai package
+export type ChatMessage = UIMessage;
+
 export const chatRequestSchema = z.object({
-  messages: z.array(z.object({
-    id: z.string(),
-    role: z.enum(["user", "assistant"]),
-    content: z.string(),
-  })),
+  messages: z.array(z.custom<UIMessage>()),
   ctx: z.string().optional(),
 });
 
@@ -64,7 +69,7 @@ export function withRateLimit(
     const clientIP = getClientIP(req);
     const rateLimitResult = rateLimit(clientIP, config);
     const rateLimitHeaders = getRateLimitHeaders(rateLimitResult);
-    
+
     if (!rateLimitResult.success) {
       return createErrorResponse(
         "Too many requests. Please try again later.",
@@ -72,14 +77,14 @@ export function withRateLimit(
         rateLimitHeaders
       );
     }
-    
+
     const response = await handler(req);
-    
+
     // Add rate limit headers to the response
     Object.entries(rateLimitHeaders).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
-    
+
     return response;
   };
 }
@@ -92,7 +97,7 @@ export function withValidation<T>(
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
       let data: any;
-      
+
       if (req.method === "GET") {
         // For GET requests, parse URL params
         const url = new URL(req.url);
@@ -101,7 +106,7 @@ export function withValidation<T>(
         // For POST/PUT/PATCH requests, parse JSON body
         data = await req.json();
       }
-      
+
       const validatedData = schema.parse(data);
       return await handler(req, validatedData);
     } catch (error) {
@@ -111,11 +116,11 @@ export function withValidation<T>(
           .join(", ");
         return createErrorResponse(`Validation error: ${errorMessage}`, 400);
       }
-      
+
       if (error instanceof SyntaxError) {
         return createErrorResponse("Invalid JSON in request body", 400);
       }
-      
+
       console.error("Validation middleware error:", error);
       return createErrorResponse("Internal server error", 500);
     }
@@ -125,13 +130,10 @@ export function withValidation<T>(
 // Combined middleware
 export function withApiSecurity<T>(
   schema: z.ZodSchema<T>,
-  handler: (req: NextRequest, data: T) => Promise<NextResponse>,
+  handler: (req: NextRequest, data: T) => Promise<any>,
   rateLimitConfig?: RateLimitConfig
 ) {
-  return withRateLimit(
-    withValidation(schema, handler),
-    rateLimitConfig
-  );
+  return withRateLimit(withValidation(schema, handler), rateLimitConfig);
 }
 
 // Token validation middleware
@@ -139,12 +141,14 @@ export function withTokenValidation(
   handler: (req: NextRequest, token: string) => Promise<NextResponse>
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
-    const token = req.headers.get("token") || req.headers.get("authorization")?.replace("Bearer ", "");
-    
+    const token =
+      req.headers.get("token") ||
+      req.headers.get("authorization")?.replace("Bearer ", "");
+
     if (!token) {
       return createErrorResponse("Authentication token is required", 401);
     }
-    
+
     try {
       const validatedToken = tokenSchema.parse(token);
       return await handler(req, validatedToken);

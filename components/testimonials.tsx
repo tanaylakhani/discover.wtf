@@ -1,12 +1,8 @@
-import React, { FC, useState } from "react";
-import { TweetCard } from "./magicui/tweet-card";
 import { cn } from "@/lib/utils";
-import { Marquee } from "./magicui/marquee";
-import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
 import Image from "next/image";
-import test from "node:test";
-import { title } from "process";
+import React, { FC, useState } from "react";
 
 const Testimonials = () => {
   type Testimonial = {
@@ -86,7 +82,7 @@ const Testimonials = () => {
   const [active, setActive] = useState<number[]>([]);
 
   return (
-    <section className="w-full flex flex-row overflow-hidden relative  md:h-screen mx-auto px-4 py-16">
+    <section className="w-full flex flex-row overflow-hidden relative  mx-auto px-4 py-16">
       <div className="max-w-5xl w-full px-4 md:mx-auto">
         {/* <h2 className="text-3xl font-inter font-medium tracking-tighter leading-tight text-center mb-12">
           Loved by People <br /> Who Hate{" "}

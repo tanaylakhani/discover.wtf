@@ -1,7 +1,11 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText, convertToModelMessages } from "ai";
 import { env } from "@/lib/env";
-import { withApiSecurity, chatRequestSchema, createErrorResponse } from "@/lib/api-validation";
+import {
+  withApiSecurity,
+  chatRequestSchema,
+  createErrorResponse,
+} from "@/lib/api-validation";
 import { NextRequest } from "next/server";
 
 const google = createGoogleGenerativeAI({

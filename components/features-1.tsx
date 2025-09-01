@@ -8,17 +8,10 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import {
-  Bookmark,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Heart,
-} from "lucide-react";
+import { Check } from "lucide-react";
 import Image from "next/image";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { Ripple } from "./magicui/ripple";
-import { Button } from "./ui/button";
 
 const features = [
   {

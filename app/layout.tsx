@@ -1,6 +1,11 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Instrument_Sans, Instrument_Serif, Inter } from "next/font/google";
+import {
+  Instrument_Sans,
+  Instrument_Serif,
+  Inter,
+  Bricolage_Grotesque,
+} from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/session-provider";
 
@@ -29,22 +34,27 @@ const instrument_sans = Instrument_Sans({
   weight: ["400", "500", "600", "700"],
   variable: "--font-instrument-sans",
 });
+const gro = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage-grotesque",
+});
 
 export const metadata: Metadata = {
   title: {
     default: "discover.wtf - Discover the Internet's Best",
-    template: "%s | discover.wtf"
+    template: "%s | discover.wtf",
   },
-  description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems. No algorithm limits - just pure discovery of the web's best content.",
+  description:
+    "TikTok for the internet. Swipe through curated websites, tools, and hidden gems. No algorithm limits - just pure discovery of the web's best content.",
   keywords: [
     "web discovery",
-    "curated websites", 
+    "curated websites",
     "internet discovery",
     "web tools",
     "browser extension",
     "website curation",
     "indie web",
-    "discovery platform"
+    "discovery platform",
   ],
   authors: [{ name: "discover.wtf team" }],
   creator: "discover.wtf",
@@ -58,7 +68,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://discover.wtf",
     title: "discover.wtf - Discover the Internet's Best",
-    description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
+    description:
+      "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
     siteName: "discover.wtf",
     images: [
       {
@@ -72,7 +83,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "discover.wtf - Discover the Internet's Best",
-    description: "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
+    description:
+      "TikTok for the internet. Swipe through curated websites, tools, and hidden gems.",
     images: ["/og-image.png"],
   },
   metadataBase: new URL("https://discover.wtf"),
@@ -94,6 +106,7 @@ export default function RootLayout({
           myFont.variable,
           instrument.variable,
           instrument_sans.variable,
+          gro.variable,
           "bg-white font-inter dark:bg-neutral-900"
         )}
       >
