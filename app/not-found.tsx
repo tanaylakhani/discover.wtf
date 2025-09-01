@@ -10,16 +10,17 @@ export default function NotFound() {
       <div className="text-center max-w-md">
         {/* 404 Animation/Image */}
         <div className="text-8xl font-bold text-orange-500 mb-4">404</div>
-        
+
         <h2 className="text-2xl font-semibold text-gray-900 mb-4">
           Page Not Found
         </h2>
-        
+
         <p className="text-gray-600 mb-8">
-          Oops! The page you&apos;re looking for seems to have wandered off into the vast internet. 
-          Don&apos;t worry, there&apos;s plenty more to discover!
+          Oops! The page you&apos;re looking for seems to have wandered off into
+          the vast internet. Don&apos;t worry, there&apos;s plenty more to
+          discover!
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild>
             <Link href="/" className="inline-flex items-center">
@@ -27,9 +28,9 @@ export default function NotFound() {
               Go Home
             </Link>
           </Button>
-          
-          <Button 
-            variant="outline" 
+
+          <Button
+            variant="outline"
             onClick={() => {
               if (typeof window !== "undefined") {
                 window.history.back();
@@ -40,7 +41,7 @@ export default function NotFound() {
             Go Back
           </Button>
         </div>
-        
+
         <div className="mt-8 text-sm text-gray-500">
           <p>
             While you&apos;re here, why not{" "}

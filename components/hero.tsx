@@ -7,6 +7,7 @@ import Image from "next/image";
 import React, { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import Heading from "./general-components";
+import { Button } from "./ui/button";
 
 const badgeVariants: Variants = {
   initial: {
@@ -23,18 +24,63 @@ const heading = `Escape the Algorithm \n Discover the Internet that Matters`;
 const paragraph = `Because the algorithm assumes what you \n want to see. We do not`;
 // const paragraph = `Don’t wait for the algorithm. Find powerful tools, made \n by indie hackers, before they hit the mainstream.`;
 const Hero = () => {
-  const { user, isAuthenticated } = useAuth();
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
+  const icons = {
+    chrome: (
+      <Image
+        className="size-6"
+        src="/chrome.svg"
+        alt="Chrome"
+        width={24}
+        height={24}
+      />
+    ),
+    edge: (
+      <Image
+        className="size-8"
+        src="/edge.svg"
+        alt="Edge"
+        width={32}
+        height={32}
+      />
+    ),
+    firefox: (
+      <Image
+        className="size-8"
+        src="/firefox.svg"
+        alt="Firefox"
+        width={32}
+        height={32}
+      />
+    ),
+    safari: (
+      <Image
+        className="size-8"
+        src="/safari.svg"
+        alt="Safari"
+        width={32}
+        height={32}
+      />
+    ),
+    brave: (
+      <Image
+        className="size-8"
+        src="/brave.svg"
+        alt="Brave"
+        width={32}
+        height={32}
+      />
+    ),
+  };
   return (
     <section
       ref={containerRef}
-      className="flex flex-col z-[6] items-center justify-center   px-4 mt-36 relative overflow-hidden"
+      className="flex flex-col z-[6] items-center justify-center   px-4 pb-10 mt-36 relative overflow-hidden"
     >
       <motion.div className="container z-[2] relative mx-auto text-center max-w-5xl flex flex-col items-center justify-center   h-full">
-        <div className="mb-8 font-inter  text-neutral-800 dark:text-neutral-200 leading-relaxed  flex flex-col items-center justify-center">
+        <div className="mb-6 font-inter  text-neutral-800 dark:text-neutral-200 leading-relaxed  flex flex-col items-center justify-center">
           <motion.div
             initial={{ y: 60, opacity: 0 }}
             animate={{
@@ -42,7 +88,7 @@ const Hero = () => {
               opacity: 1,
             }}
             className={cn(
-              " mb-6 flex z-[2] bg-orange-50  w-fit dark:bg-neutral-900 dark:border-neutral-800 backdrop-blur-lg text-sm text-orange-600 font-medium items-center justify-center border  border-orange-200 px-1 static shadow-lg py-1  rounded-3xl "
+              " mb-6 flex z-[2] bg-orange-50  w-fit dark:bg-neutral-900 dark:border-neutral-800 backdrop-blur-lg text-sm text-orange-600 font-medium items-center justify-center border  border-orange-200 px-1 static shadow-lg py-1  rounded-3xl cursor-pointer"
             )}
           >
             <div className="flex text-xxs md:text-xs text-white bg-orange-600 font-medium px-3 items-center justify-center py-0.5 rounded-full tracking-tight">
@@ -70,58 +116,25 @@ const Hero = () => {
 
         <motion.div
           variants={badgeVariants}
-          whileHover={{
-            y: -10,
-            scale: 1.05,
-          }}
           initial="initial"
           animate="animate"
           transition={{ duration: 0.1, ease: "easeOut" }}
-          className="flex flex-col relative items-center justify-start"
         >
-          <div className="delay-75 border-beam cursor-pointer duration-300 transition-all  flex flex-row items-center justify-center  p-3 rounded-2xl bg-white">
-            <Image
-              width={100}
-              height={100}
-              alt=""
-              className="aspect-square border border-neutral-200 rounded-xl object-cover"
-              src={"/qr.png"}
-            />
-            <div className="ml-4 flex flex-col h-full py-2 items-start justify-start pr-2">
-              <span className="text-neutral-700 text-sm font-medium text-left leading-tight">
-                Scan to download <br /> extension
-              </span>
-              <div className="w-full flex mt-2 items-center justify-start">
-                {Array.from({ length: 5 }).map((_, i) => {
-                  return (
-                    <Star
-                      key={i}
-                      strokeWidth={0}
-                      className="size-4 fill-orange-400"
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          {/* <Button className="group md:max-w-xs w-full relative px-8 h-14 py-6 text-lg font-semibold text-white border-0 rounded-full  transition-all [&_svg]:size-6 bg-indigo-700 hover:bg-indigo-800 duration-300 hover:scale-105 hover:shadow-2xl">
-            <img
+          <Button className="group overflow-hidden w-fit relative px-8 h-14 py-6 text-lg font-semibold  border-0 rounded-full  transition-all [&_svg]:size-6 text-white bg-orange-600  duration-300 hover:scale-105 ">
+            {/* <img
               draggable={false}
               className="group-hover:opacity-100 select-none absolute opacity-0 "
               src="stars.gif"
               alt=""
-            />
+            /> */}
             <motion.div className="relative font-inter z-10 flex items-center space-x-2">
               {icons["chrome"]}
               <span className="flex items-center justify-center mr-2">
-                Get Discover for Chrome
+                Try it on Chrome
               </span>
             </motion.div>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20  to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-          </Button> */}
-          {/* <span className="text-neutral-700 font-medium tracking-tight mt-2 cursor-pointer hover:underline font-inter underline-offset-2">
-            Works on all browsers
-          </span> */}
+          </Button>
         </motion.div>
       </motion.div>
     </section>
@@ -152,7 +165,7 @@ export function WordsPullUp({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <Heading className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif font-thin inline-block mb-6 leading-[1]  md:leading-none ">
+    <Heading className="text-4xl md:text-5xl lg:text-6xl z-[2] text-black tracking-tight font-instrument-serif inline-block mb-6 leading-[1]  md:leading-none ">
       {splittedText.map((current, i) => {
         if (current === "\n") {
           return <br className="" key={i} />;

@@ -19,7 +19,6 @@ const AnimationSection = () => {
     position: "static",
   });
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("Scroll Y Progress:", latest);
     if (latest > 0.26) {
       setPosition({ position: "relative" });
     } else if (latest < 0.26) {
