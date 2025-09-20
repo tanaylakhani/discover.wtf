@@ -21,6 +21,12 @@ export const chatRequestSchema = z.object({
   messages: z.array(z.custom<UIMessage>()),
   ctx: z.string().optional(),
 });
+export const suggestedPromptsSchema = z.object({
+  markdown: z.string(),
+});
+export const GetSuggestedPromptsOutputSchema = z.object({
+  prompts: z.array(z.string()).length(4),
+});
 
 // Generic API response type
 export interface ApiResponse<T = any> {
@@ -129,11 +135,16 @@ export function withValidation<T>(
 
 // Combined middleware
 export function withApiSecurity<T>(
-  schema: z.ZodSchema<T>,
-  handler: (req: NextRequest, data: T) => Promise<any>,
+  schema: z.ZodSchema<T> | undefined,
+  handler: (req: NextRequest, data?: T) => Promise<any>,
   rateLimitConfig?: RateLimitConfig
 ) {
-  return withRateLimit(withValidation(schema, handler), rateLimitConfig);
+  if (schema) {
+    return withRateLimit(withValidation(schema, handler), rateLimitConfig);
+  } else {
+    // If no schema, just run handler with rate limiting, no validation
+    return withRateLimit((req) => handler(req, undefined), rateLimitConfig);
+  }
 }
 
 // Token validation middleware

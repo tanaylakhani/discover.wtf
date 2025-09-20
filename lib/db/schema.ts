@@ -95,8 +95,10 @@ export const comments = pgTable("comments", {
   commentedAt: timestamp("commented_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+  parentId: uuid("parent_id").references((): any => comments.id, {
+    onDelete: "cascade",
+  }),
 });
-
 export const commentMedia = pgTable("comment_media", {
   id: uuid("id").defaultRandom().primaryKey(),
   commentId: uuid("comment_id")
@@ -137,6 +139,45 @@ export const userLinkVisits = pgTable(
     linkIdx: index("idx_link").on(table.linkId),
   })
 );
+
+export const chats = pgTable("chats", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),
+  title: text("title"), // optional: "My conversation"
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Messages table (UIMessage compatible)
+export const messages = pgTable("messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  chatId: uuid("chat_id")
+    .references(() => chats.id, { onDelete: "cascade" })
+    .notNull(),
+  role: text("role").notNull(), // "user" | "assistant" | "system" | "tool"
+  content: jsonb("content").notNull(), // full UIMessage.content
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Likes on comments table
+export const commentLikes = pgTable(
+  "comment_likes",
+  {
+    userId: text("user_id").notNull(),
+    commentId: uuid("comment_id")
+      .notNull()
+      .references(() => comments.id, { onDelete: "cascade" }),
+    likedAt: timestamp("liked_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.userId, table.commentId] }), // one like per user per comment
+  })
+);
+
+export type CommentLike = typeof commentLikes.$inferSelect;
+export type NewCommentLike = typeof commentLikes.$inferInsert;
 
 // TypeScript types for the schema
 
