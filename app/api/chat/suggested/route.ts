@@ -12,9 +12,6 @@ export async function POST(req: NextRequest) {
   return withApiSecurity(
     suggestedPromptsSchema,
     async (_, data) => {
-      console.log({
-        data: data?.markdown,
-      });
       try {
         const result = await generateObject({
           model: openai("gpt-4o-mini"),

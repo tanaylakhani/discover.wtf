@@ -20,6 +20,9 @@ export type ChatMessage = UIMessage;
 export const chatRequestSchema = z.object({
   messages: z.array(z.custom<UIMessage>()),
   ctx: z.string().optional(),
+  chatId: z.string(),
+  userId: z.string(),
+  linkId: z.string(),
 });
 export const suggestedPromptsSchema = z.object({
   markdown: z.string(),

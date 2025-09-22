@@ -7,28 +7,28 @@ import { NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   // Add security headers for all requests
   const response = NextResponse.next();
-  
+
   // Security headers for production
   if (process.env.NODE_ENV === "production") {
     // Prevent clickjacking
     response.headers.set("X-Frame-Options", "DENY");
-    
+
     // Prevent XSS attacks
     response.headers.set("X-XSS-Protection", "1; mode=block");
-    
+
     // Prevent MIME sniffing
     response.headers.set("X-Content-Type-Options", "nosniff");
-    
+
     // Referrer policy
     response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-    
+
     // HSTS (HTTP Strict Transport Security) - only for HTTPS
     response.headers.set(
       "Strict-Transport-Security",
       "max-age=31536000; includeSubDomains; preload"
     );
   }
-  
+
   // Handle API authentication for specific routes
   if (req.nextUrl.pathname.startsWith("/api/links/")) {
     const auth = req.headers.get("Authorization");
@@ -44,7 +44,7 @@ export async function middleware(req: NextRequest) {
     try {
       const client = createApolloClient(token);
       const user = await getUserId(client);
-      
+
       if (!user?.id) {
         return new NextResponse(JSON.stringify({ error: "User not found" }), {
           status: 404,
@@ -63,7 +63,7 @@ export async function middleware(req: NextRequest) {
       });
     } catch (error) {
       console.error("Auth middleware error:", error);
-      
+
       if (error instanceof ErrorWithStatus) {
         return NextResponse.json(
           { error: error.message },
@@ -73,7 +73,7 @@ export async function middleware(req: NextRequest) {
           }
         );
       }
-      
+
       return NextResponse.json(
         { error: "Internal Server Error" },
         {
@@ -83,7 +83,7 @@ export async function middleware(req: NextRequest) {
       );
     }
   }
-  
+
   return response;
 }
 

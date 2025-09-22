@@ -143,6 +143,7 @@ export const userLinkVisits = pgTable(
 export const chats = pgTable("chats", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id").notNull(),
+  linkId: text("link_id").notNull(),
   title: text("title"), // optional: "My conversation"
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -203,3 +204,4 @@ export type NewComment = typeof comments.$inferInsert;
 
 export type Bookmark = typeof bookmarks.$inferSelect;
 export type NewBookmark = typeof bookmarks.$inferInsert;
+export type TMessage = typeof messages.$inferSelect;
