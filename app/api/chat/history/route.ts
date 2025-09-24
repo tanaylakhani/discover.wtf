@@ -1,7 +1,7 @@
 import { createErrorResponse, withApiSecurity } from "@/lib/api-validation";
 import { db } from "@/lib/db";
 import { chats, messages } from "@/lib/db/schema";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -17,7 +17,8 @@ export async function GET(req: NextRequest) {
           const chatMessages = await db
             .select()
             .from(chats)
-            .where(and(eq(chats.linkId, linkId as string)));
+            .where(and(eq(chats.linkId, linkId as string)))
+            .orderBy(desc(chats.createdAt));
 
           return NextResponse.json(
             { success: true, chats: chatMessages },

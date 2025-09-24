@@ -36,7 +36,6 @@ async function generateChatTitle(prompt: string) {
     prompt,
   });
 
-  // fallback if AI returns nothing
   return text?.trim() || "New Chat";
 }
 
