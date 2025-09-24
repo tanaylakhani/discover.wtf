@@ -50,10 +50,6 @@ export async function POST(req: NextRequest) {
       const chatId = data.chatId;
       const userId = data.userId;
       const linkId = data.linkId;
-      console.log({
-        userId,
-        chatId: data.chatId,
-      });
 
       const lastUserMessage = [...(data.messages || [])]
         .reverse()
@@ -112,7 +108,6 @@ export async function POST(req: NextRequest) {
           },
         });
       } catch (error) {
-        console.error("Chat API error:", error);
         return createErrorResponse("Failed to process chat request", 500);
       }
     },

@@ -122,7 +122,6 @@ export async function GET(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error in comment:", error);
     if (error instanceof ErrorWithStatus) {
       return NextResponse.json(
         {
@@ -168,7 +167,6 @@ export async function POST(request: NextRequest) {
       typeof userValue === "string"
         ? (JSON.parse(userValue) as TCommentAuthor)
         : null;
-    console.log({ content, fileData, user });
 
     // const result = await db.transaction(async (tx) => {
     // 1. Insert comment
@@ -200,15 +198,12 @@ export async function POST(request: NextRequest) {
             linkId: linkId,
           },
         });
-      console.log({ data, error });
       if (error) {
         throw new ErrorWithStatus(`Upload failed: ${error.message}`, 500);
       }
       const { data: publicData } = supabase.storage
         .from("discover.wtf")
         .getPublicUrl(data.path);
-
-      console.log("PublicUrl: ", publicData?.publicUrl);
 
       const payload = {
         url: publicData?.publicUrl as string,
@@ -233,7 +228,6 @@ export async function POST(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error in comment:", error);
     if (error instanceof ErrorWithStatus) {
       return NextResponse.json(
         {
@@ -274,7 +268,6 @@ export async function DELETE(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error in delete comment:", error);
     if (error instanceof ErrorWithStatus) {
       return NextResponse.json(
         {

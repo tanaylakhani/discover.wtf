@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
     async () => {
       const chatId = req.nextUrl.searchParams.get("chatId");
       const linkId = req.nextUrl.searchParams.get("linkId");
-      console.log({ chatId, linkId });
       try {
         if (!chatId) {
           // Return raw join result for history
@@ -52,7 +51,6 @@ export async function GET(req: NextRequest) {
           );
         }
       } catch (error) {
-        console.error("API error:", error);
         return createErrorResponse("Failed to get chat messages", 500);
       }
     },

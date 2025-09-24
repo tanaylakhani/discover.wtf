@@ -26,14 +26,11 @@ export async function POST(req: NextRequest) {
     `,
         });
 
-        console.log({ result: result?.object.prompts });
-
         return NextResponse.json(
           { success: true, prompts: result?.object.prompts },
           { status: 200 }
         );
       } catch (error) {
-        console.error("Chat API error:", error);
         return createErrorResponse("Failed to process chat request", 500);
       }
     },
