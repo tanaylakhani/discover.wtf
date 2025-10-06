@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
     const currentPage =
       request?.nextUrl?.searchParams.get("currentPage") || "1";
     const perPage = request?.nextUrl?.searchParams.get("perPage") || "20";
-    console.log({ currentPage, perPage });
     const client = createApolloClient(token);
 
     const data = await client.query({
@@ -24,7 +23,6 @@ export async function GET(request: NextRequest) {
     });
 
     const links = data?.data?.recall_links;
-    console.log({ links });
     if (links.length === 0) {
       return NextResponse.json(
         { error: "No links found" },
@@ -38,7 +36,6 @@ export async function GET(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error fetching likes:", error);
     return NextResponse.json(
       { error: "Failed to fetch likes" },
       { status: 500, headers: options }

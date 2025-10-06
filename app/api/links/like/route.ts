@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error in insert bookmark:", error);
     if (error instanceof ErrorWithStatus) {
       return NextResponse.json(
         {
@@ -84,7 +83,6 @@ export async function POST(request: NextRequest) {
       { status: 200, headers: options }
     );
   } catch (error) {
-    console.error("Error in insert bookmark:", error);
     if (error instanceof ErrorWithStatus) {
       return NextResponse.json(
         {

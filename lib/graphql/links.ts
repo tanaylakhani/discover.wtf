@@ -547,7 +547,7 @@ export const MUTATION_CREATE_LINK = () => gql`
     }
   }
 `;
-export const PUBLIC_RANDOM_LINKS_QUERY = gql`
+export const PUBLIC_RANDOM_LINKS_QUERY = (domain?: string) => gql`
   query GetPublicRandomLinks($limit: Int!) {
     public_random_links(limit: $limit) {
       id
@@ -561,7 +561,6 @@ export const PUBLIC_RANDOM_LINKS_QUERY = gql`
     }
   }
 `;
-
 
 export const PUBLIC_LINKS_QUERY = gql`
   query GetPublicLinks($ids: [String!]!) {

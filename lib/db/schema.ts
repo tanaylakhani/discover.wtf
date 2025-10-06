@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -95,8 +96,10 @@ export const comments = pgTable("comments", {
   commentedAt: timestamp("commented_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+  parentId: uuid("parent_id").references((): any => comments.id, {
+    onDelete: "cascade",
+  }),
 });
-
 export const commentMedia = pgTable("comment_media", {
   id: uuid("id").defaultRandom().primaryKey(),
   commentId: uuid("comment_id")
@@ -138,6 +141,92 @@ export const userLinkVisits = pgTable(
   })
 );
 
+export const chats = pgTable("chats", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),
+  linkId: text("link_id").notNull(),
+  title: text("title"), // optional: "My conversation"
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Messages table (UIMessage compatible)
+export const messages = pgTable("messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  chatId: uuid("chat_id")
+    .references(() => chats.id, { onDelete: "cascade" })
+    .notNull(),
+  role: text("role").notNull(), // "user" | "assistant" | "system" | "tool"
+  content: jsonb("content").notNull(), // full UIMessage.content
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const relatedQuestions = pgTable("related_questions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  chatId: uuid("chat_id")
+    .notNull()
+    .references(() => chats.id, { onDelete: "cascade" }),
+  assistantMessageId: uuid("assistant_message_id")
+    .notNull()
+    .references(() => messages.id, { onDelete: "cascade" }),
+  questions: jsonb("questions").$type<string[]>().notNull(),
+  status: text("status", { enum: ["generating", "complete", "error"] })
+    .notNull()
+    .default("complete"),
+  error: text("error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Relations
+export const relatedQuestionsRelations = relations(
+  relatedQuestions,
+  ({ one }) => ({
+    chat: one(chats, {
+      fields: [relatedQuestions.chatId],
+      references: [chats.id],
+    }),
+    assistantMessage: one(messages, {
+      fields: [relatedQuestions.assistantMessageId],
+      references: [messages.id],
+    }),
+  })
+);
+
+// Add relations to existing tables
+export const chatsRelations = relations(chats, ({ many }) => ({
+  messages: many(messages),
+  relatedQuestions: many(relatedQuestions),
+}));
+
+export const messagesRelations = relations(messages, ({ one, many }) => ({
+  chat: one(chats, {
+    fields: [messages.chatId],
+    references: [chats.id],
+  }),
+  relatedQuestions: many(relatedQuestions),
+}));
+
+// Likes on comments table
+export const commentLikes = pgTable(
+  "comment_likes",
+  {
+    userId: text("user_id").notNull(),
+    commentId: uuid("comment_id")
+      .notNull()
+      .references(() => comments.id, { onDelete: "cascade" }),
+    likedAt: timestamp("liked_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.userId, table.commentId] }), // one like per user per comment
+  })
+);
+
+export type CommentLike = typeof commentLikes.$inferSelect;
+export type NewCommentLike = typeof commentLikes.$inferInsert;
+
 // TypeScript types for the schema
 
 // Auth types
@@ -162,3 +251,4 @@ export type NewComment = typeof comments.$inferInsert;
 
 export type Bookmark = typeof bookmarks.$inferSelect;
 export type NewBookmark = typeof bookmarks.$inferInsert;
+export type TMessage = typeof messages.$inferSelect;

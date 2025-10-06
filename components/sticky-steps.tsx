@@ -5,15 +5,15 @@ import React from "react";
 const steps = [
   {
     title: "Open a Tab and Step Into a Curated Feed ",
-    video: "/asset.mp4",
+    video: "/card1.mp4",
   },
   {
     title: "Swipe Through Sites No Followers Needed",
-    video: "/asset1.mp4",
+    video: "/card2.mp4",
   },
   {
     title: "Save What you like and Build your Internet Shelf",
-    image: "/asset2.png",
+    video: "/card3.mp4",
   },
   //   {
   //     title: "Open a New Tab and Step Into a Curated Feed of the Web",
@@ -68,59 +68,58 @@ const StickySteps = () => {
     "bg-indigo-500",
   ];
   return (
-    <section className="w-full flex flex-col-reverse max-w-5xl mx-auto md:flex-row py-[100px]  items-start justify-center h-[calc(1400px)]">
-      <div className="md:w-1/2 w-full pl-10 mt-[200px]">
-        {steps.map((step, index) => (
-          <div
-            key={index}
-            ref={(el) => {
-              stepRefs.current[index] = el;
-            }}
-            className={cn(
-              "h-[200px] w-[300px] flex items-center justify-center",
-              currentStep === index
-                ? " text-black"
-                : "blur-[3px] text-neutral-600"
-            )}
-          >
-            <div className="flex items-center justify-center h-full">
-              <h3 className="text-3xl mx-auto font-bold tracking-tight">
-                {step.title}
-              </h3>
+    <>
+      <section className="w-full hidden md:flex flex-col-reverse max-w-5xl mx-auto md:flex-row py-[100px]  items-start justify-center h-[calc(1400px)]">
+        <div className="md:w-1/2 w-full pl-10 mt-[200px]">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              ref={(el) => {
+                stepRefs.current[index] = el;
+              }}
+              className={cn(
+                "h-[200px] w-[300px] flex items-center justify-center",
+                currentStep === index
+                  ? " text-black"
+                  : "blur-[3px] text-neutral-600"
+              )}
+            >
+              <div className="flex items-center justify-center h-full">
+                <h3 className="text-3xl mx-auto font-bold tracking-tight">
+                  {step.title}
+                </h3>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div
-        style={{
-          transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-        className={cn(
-          "md:w-1/2 w-full sticky top-10  overflow-hidden h-[600px] flex items-center justify-center border border-neutral-200 rounded-3xl",
-          bgs[currentStep]
-        )}
-      >
-        <AnimatePresence key={currentStep}>
-          <motion.div
-            initial={{ y: 200 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="size-full flex relative items-center justify-center "
-          >
-            {steps[currentStep]?.video ? (
-              <video
-                src={steps[currentStep].video}
-                controls
-                autoPlay
-                className="border-[12px] max-w-xs absolute -bottom-[200px] border-neutral-800 rounded-[3rem]"
-              />
-            ) : (
-              <img src={steps[currentStep].image} />
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </section>
+          ))}
+        </div>
+        <div
+          style={{
+            transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+          className={cn(
+            "md:w-1/2 w-full sticky top-10  overflow-hidden h-[600px] flex items-center justify-center border border-neutral-200 rounded-3xl"
+          )}
+        >
+          <AnimatePresence key={currentStep}>
+            <motion.div
+              initial={{ opacity: 0.8 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className="size-full flex relative items-center justify-center "
+            >
+              {steps[currentStep]?.video && (
+                <video
+                  src={steps[currentStep].video}
+                  controls={false}
+                  autoPlay
+                  className="absolute "
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+    </>
   );
 };
 
