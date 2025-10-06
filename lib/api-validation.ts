@@ -30,6 +30,9 @@ export const suggestedPromptsSchema = z.object({
 export const GetSuggestedPromptsOutputSchema = z.object({
   prompts: z.array(z.string()).length(4),
 });
+export const GetRelatedQuestionOutputSchema = z.object({
+  prompts: z.array(z.string()).length(5),
+});
 
 // Generic API response type
 export interface ApiResponse<T = any> {

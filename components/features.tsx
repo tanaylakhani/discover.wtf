@@ -18,13 +18,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
 const Features = () => {
-  interface Feature {
-    title: string;
-    description: string;
-
-    visualHint?: string; // quick description of intended visual (for dev notes)
-  }
-
   const features = [
     {
       title: "Aggregated Across the Internet",
@@ -57,59 +50,6 @@ const Features = () => {
     },
   ];
 
-  const features2 = [
-    {
-      title: "Swipe Into Serendipity",
-      content:
-        "Discover.wtf replaces search with swipe — feeding you the coolest sites you didn’t know you needed.",
-    },
-    {
-      title: "Real Websites. Not Previews.",
-      content:
-        "Unlike social feeds, every swipe takes you to the actual site — no iframes, no previews, just the real open web.",
-    },
-    {
-      title: "Link is the New Content",
-      content:
-        "Discover treats links as atomic content units — beautifully rendered, context-rich, and saveable.",
-    },
-    {
-      title: "Find What Algorithms Can’t",
-      content:
-        "Our feed surfaces weird, fresh, indie web content — not SEO traps or trending echo chambers.",
-    },
-    {
-      title: "Built by Curators, Not Corporations",
-      content:
-        "Explore collections made by internet explorers like you. Follow curators, not follower counts.",
-    },
-    {
-      title: "Your Browser, Reimagined",
-      content:
-        "Discover transforms your new tab into a vibrant feed of internet gems — tailored to your curiosity.",
-    },
-    {
-      title: "AI That Finds What You Feel",
-      content:
-        "Pull up our extension on any page and use natural language to explore, compare, and extract insights instantly.",
-    },
-    {
-      title: "Save, Like, Comment Anywhere",
-      content:
-        "React to any site you visit, leave notes, save links, and chat with others — directly from the browser.",
-    },
-    {
-      title: "Moodboards for Your Mind",
-      content:
-        "Organize discoveries into moodboards that are shareable, aesthetic, and idea-driven.",
-    },
-    {
-      title: "Reclaim Your Feed",
-      content:
-        "Discover gives you back control of what you see — and what you never want to see again.",
-    },
-  ];
-
   const [hoveredFeature, setHoveredFeature] = React.useState<number | null>(
     null
   );
@@ -126,7 +66,10 @@ const Features = () => {
         Collect the best bits
         <br />
         <span className="bg-gradient-to-t bg-clip-text text-transparent from-orange-500 via-orange-600 to-orange-400">
-          of the Internet.
+          of the{" "}
+          <span className="text-6xl font-instrument-serif font-light">
+            Internet.
+          </span>
         </span>
       </motion.h2>
       <motion.div
@@ -181,10 +124,10 @@ const Features = () => {
                       opacity: 1,
                       scale: 1,
                     }}
-                    className="border-[12px] max-w-xs border-neutral-400 rounded-[3rem] absolute -bottom-[70%] overflow-hidden mx-auto"
                   >
                     <img
-                      src="/asset4.avif"
+                      src="/lists.jpg"
+                      className="mb-10"
                       style={{ objectFit: "fill" }}
                       alt=""
                     />

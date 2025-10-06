@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -159,6 +160,52 @@ export const messages = pgTable("messages", {
   content: jsonb("content").notNull(), // full UIMessage.content
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+export const relatedQuestions = pgTable("related_questions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  chatId: uuid("chat_id")
+    .notNull()
+    .references(() => chats.id, { onDelete: "cascade" }),
+  assistantMessageId: uuid("assistant_message_id")
+    .notNull()
+    .references(() => messages.id, { onDelete: "cascade" }),
+  questions: jsonb("questions").$type<string[]>().notNull(),
+  status: text("status", { enum: ["generating", "complete", "error"] })
+    .notNull()
+    .default("complete"),
+  error: text("error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Relations
+export const relatedQuestionsRelations = relations(
+  relatedQuestions,
+  ({ one }) => ({
+    chat: one(chats, {
+      fields: [relatedQuestions.chatId],
+      references: [chats.id],
+    }),
+    assistantMessage: one(messages, {
+      fields: [relatedQuestions.assistantMessageId],
+      references: [messages.id],
+    }),
+  })
+);
+
+// Add relations to existing tables
+export const chatsRelations = relations(chats, ({ many }) => ({
+  messages: many(messages),
+  relatedQuestions: many(relatedQuestions),
+}));
+
+export const messagesRelations = relations(messages, ({ one, many }) => ({
+  chat: one(chats, {
+    fields: [messages.chatId],
+    references: [chats.id],
+  }),
+  relatedQuestions: many(relatedQuestions),
+}));
 
 // Likes on comments table
 export const commentLikes = pgTable(

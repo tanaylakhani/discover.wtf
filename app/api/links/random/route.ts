@@ -30,14 +30,14 @@ export async function GET(request: NextRequest) {
       const client = createApolloClient(token);
 
       const data = await client.query({
-        query: PUBLIC_RANDOM_LINKS_QUERY,
+        query: PUBLIC_RANDOM_LINKS_QUERY(),
         variables: { limit: Math.min(limit, 100) }, // Cap at 100 for performance
         errorPolicy: "all", // Return partial data if available
       });
 
       const randomLinks =
         (data?.data?.public_random_links as PublicRandomLink[]) || [];
-
+      console.log({ randomLinks });
       if (randomLinks.length === 0) {
         return createErrorResponse("No random links found", 404, corsHeaders);
       }
