@@ -116,7 +116,7 @@ const Features = () => {
               {index === 1 && <Card1 isHovered={hoveredFeature === index} />}
               {index === 4 && <Card2 isHovered={hoveredFeature === index} />}
               {index === 2 && (
-                <div className="w-full h-full relative overflow-hidden flex items-center justify-center">
+                <div className="w-full pb-[180px] h-full relative overflow-hidden flex items-center justify-start">
                   <motion.div
                     initial={{ y: 200, opacity: 0.8, scale: 0.9 }}
                     whileInView={{
@@ -125,12 +125,7 @@ const Features = () => {
                       scale: 1,
                     }}
                   >
-                    <img
-                      src="/lists.jpg"
-                      className="mb-10"
-                      style={{ objectFit: "fill" }}
-                      alt=""
-                    />
+                    <img src="/list.png" style={{ objectFit: "fill" }} alt="" />
                   </motion.div>
                 </div>
               )}

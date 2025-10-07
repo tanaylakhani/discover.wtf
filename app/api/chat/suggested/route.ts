@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
           prompt: `
     You are an expert prompt engineer. Given the following markdown content, generate four creative and relevant prompts that a user might ask based on the content. Return the prompts as an array of four strings in JSON format under the key "prompts".
 
-    Each prompt must be very short and clear and at most 10-12 words.
+    Each prompt must be very subtle,short and clear and at most 4-6 words.
 
     Markdown content:
     ${data?.markdown}
