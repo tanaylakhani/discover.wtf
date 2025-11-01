@@ -154,7 +154,8 @@ export async function POST(req: NextRequest) {
                         system: `
                        Based on the current conversation about "${rawQuery}",
                        Suggest 5 natural follow-up questions the user might ask next.
-                         Each prompt must be very short and clear and at most 10-12 words.
+                       
+                       Each prompt must be very subtle,short and clear and at most 4-6 words.
                       `,
                       });
 
